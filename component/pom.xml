@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.wso2.extension.siddhi.evalscript</groupId>
+        <groupId>org.wso2.extension.siddhi.gpl.evalscript.r</groupId>
         <artifactId>siddhi-gpl-evalscript-r-parent</artifactId>
         <version>3.1.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -75,7 +75,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.extension.siddhi.evalscript.r,
+                            org.wso2.extension.siddhi.gpl.evalscript.r,
                         </Export-Package>
                         <Import-Package>
                             *;resolution:=optional
