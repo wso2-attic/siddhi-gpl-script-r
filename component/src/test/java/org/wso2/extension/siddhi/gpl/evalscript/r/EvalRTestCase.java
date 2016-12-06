@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.extension.siddhi.evalscript.r;
+package org.wso2.extension.siddhi.gpl.evalscript.r;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
