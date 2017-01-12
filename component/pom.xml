@@ -74,8 +74,12 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Private-Package>
+                            org.rosuda.*
+                        </Private-Package>
                         <Export-Package>
-                            org.wso2.extension.siddhi.gpl.evalscript.r,
+                            !org.rosuda.*,
+                            org.wso2.extension.siddhi.gpl.evalscript.r.*,
                         </Export-Package>
                         <Import-Package>
                             *;resolution:=optional
