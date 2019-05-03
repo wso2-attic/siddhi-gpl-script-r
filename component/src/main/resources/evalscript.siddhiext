@@ -15,4 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-r=org.wso2.extension.siddhi.gpl.evalscript.r.EvalR
+r=io.siddhi.extension.gpl.evalscript.r.r.EvalR

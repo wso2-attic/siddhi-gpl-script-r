@@ -16,43 +16,52 @@
  * under the License.
  */
 
-package org.wso2.extension.siddhi.gpl.evalscript.r;
+package io.siddhi.extension.gpl.evalscript.r.r;
 
+import io.siddhi.core.SiddhiAppRuntime;
+import io.siddhi.core.exception.SiddhiAppCreationException;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
-import org.wso2.siddhi.core.SiddhiManager;
-import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.ExecutionPlanCreationException;
-import org.wso2.siddhi.core.query.output.callback.QueryCallback;
-import org.wso2.siddhi.core.stream.input.InputHandler;
-import org.wso2.siddhi.core.util.EventPrinter;
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.core.event.Event;
+import io.siddhi.core.query.output.callback.QueryCallback;
+import io.siddhi.core.stream.input.InputHandler;
+import io.siddhi.core.util.EventPrinter;
 
 import static org.junit.Assume.assumeTrue;
 
 public class EvalRTestCase {
 
-    static final Logger log = Logger.getLogger(EvalRTestCase.class);
+    private static final Logger log = Logger.getLogger(EvalRTestCase.class);
 
-    boolean isReceived[] = new boolean[10];
-    Object value[] = new Object[10];
+    private boolean[] isReceived = new boolean[10];
+    private Object[] value = new Object[10];
+
+    @Before
+    public void assumeEnvironmentVariablesPresent() {
+        assumeTrue(System.getenv("JRI_HOME") != null);
+        assumeTrue(System.getenv("R_HOME") != null);
+    }
 
     @Test
     public void testEvalRConcat() throws InterruptedException {
         log.info("TestEvalRConcat");
-        assumeTrue(System.getenv("JRI_HOME") != null);
 
         SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setExtension("script:r", EvalR.class);
 
         String concatFunc = "define function concatR[R] return string {\n" +
-                "return(paste(data, collapse=\"\"));" +
-                "};";
+                "return(paste(data, collapse=\"\"));};";
 
-        String cseEventStream = "@config(async = 'true')define stream cseEventStream (symbol string, price float, volume long);";
-        String query = ("@info(name = 'query1') from cseEventStream select price , concatR(symbol,' ',price) as concatStr " +
-                "group by volume insert into mailOutput;");
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(concatFunc + cseEventStream + query);
+        String cseEventStream =
+                "@config(async = 'true')define stream cseEventStream (symbol string, price float, volume long);";
+        String query =
+                ("@info(name = 'query1') from cseEventStream select price , concatR(symbol,' ',price) as concatStr " +
+                        "group by volume insert into mailOutput;");
+        SiddhiAppRuntime executionPlanRuntime =
+                siddhiManager.createSiddhiAppRuntime(concatFunc + cseEventStream + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
             @Override
@@ -80,12 +89,12 @@ public class EvalRTestCase {
         executionPlanRuntime.shutdown();
     }
 
-    @Test(expected = ExecutionPlanCreationException.class)
+    @Test(expected = SiddhiAppCreationException.class)
     public void testRCompilationFailure() throws InterruptedException {
         log.info("testRCompilationFailure");
-        assumeTrue(System.getenv("JRI_HOME") != null);
 
         SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setExtension("script:r", EvalR.class);
 
         String concatFunc = "define function concatR[R] return string {\n" +
                 "  str1 <- data[1;\n" +
@@ -95,7 +104,7 @@ public class EvalRTestCase {
                 "  return res;\n" +
                 "};";
 
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(concatFunc);
+        SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(concatFunc);
 
         executionPlanRuntime.shutdown();
     }

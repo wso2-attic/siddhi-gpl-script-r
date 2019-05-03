@@ -25,9 +25,9 @@
         <version>1</version>
     </parent>
 
-    <groupId>org.wso2.extension.siddhi.gpl.evalscript.r</groupId>
+    <groupId>io.siddhi.extension.gpl.evalscript.r.r</groupId>
     <artifactId>siddhi-gpl-evalscript-r-parent</artifactId>
-    <version>3.1.4-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Siddhi Eval Script Extension - R Aggregator Pom</name>
     <url>http://wso2.org</url>
@@ -46,7 +46,7 @@
     </profiles>
 
     <properties>
-        <siddhi.version>3.1.2</siddhi.version>
+        <siddhi.version>5.0.0</siddhi.version>
         <rjava.version>0.9.7.wso2v1</rjava.version>
         <junit.version>4.10</junit.version>
     </properties>
@@ -62,17 +62,17 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-core</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-query-api</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.siddhi</groupId>
+                <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-query-compiler</artifactId>
                 <version>${siddhi.version}</version>
             </dependency>

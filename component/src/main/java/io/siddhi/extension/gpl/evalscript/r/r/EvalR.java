@@ -16,22 +16,23 @@
  * under the License.
  */
 
-package org.wso2.extension.siddhi.gpl.evalscript.r;
+package io.siddhi.extension.gpl.evalscript.r.r;
 
 
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.exception.SiddhiAppRuntimeException;
+import io.siddhi.core.function.Script;
+import io.siddhi.core.util.config.ConfigReader;
 import org.rosuda.REngine.JRI.JRIEngine;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPExpressionVector;
 import org.rosuda.REngine.REXPWrapper;
 import org.rosuda.REngine.REngine;
 import org.rosuda.REngine.RList;
-import org.wso2.siddhi.core.exception.ExecutionPlanCreationException;
-import org.wso2.siddhi.core.exception.ExecutionPlanRuntimeException;
-import org.wso2.siddhi.core.function.EvalScript;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.definition.Attribute.Type;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.definition.Attribute.Type;
 
-public class EvalR implements EvalScript {
+public class EvalR extends Script {
 
     private REngine rEngine;
     private REXP env;
@@ -40,7 +41,7 @@ public class EvalR implements EvalScript {
     private Attribute.Type returnType;
 
     @Override
-    public void init(String name, String body) {
+    public void init(String name, String body, ConfigReader configReader) {
         this.functionName = name;
         try {
             // Get the JRIEngine or create one
@@ -49,7 +50,7 @@ public class EvalR implements EvalScript {
             env = rEngine.newEnvironment(null, true);
 
         } catch (Exception e) {
-            throw new ExecutionPlanCreationException("Error while initializing the REngine", e);
+            throw new SiddhiAppCreationException("Error while initializing the REngine", e);
         }
 
         try {
@@ -59,7 +60,7 @@ public class EvalR implements EvalScript {
             // Parse the function call in R
             functionCall = rEngine.parse(name + "(data)", false);
         } catch (Exception e) {
-            throw new ExecutionPlanCreationException("Compilation failure of the R function " + name, e);
+            throw new SiddhiAppCreationException("Compilation failure of the R function " + name, e);
         }
     }
 
@@ -109,12 +110,12 @@ public class EvalR implements EvalScript {
                 default:
                     break;
             }
-            throw new ExecutionPlanRuntimeException(
+            throw new SiddhiAppRuntimeException(
                     "Wrong return type detected. Expected: " + returnType
                             + " found: " + result.asNativeJavaObject().getClass().getCanonicalName());
 
         } catch (Exception e) {
-            throw new ExecutionPlanRuntimeException("Error evaluating R function " + functionName, e);
+            throw new SiddhiAppRuntimeException("Error evaluating R function " + functionName, e);
         }
     }
 
